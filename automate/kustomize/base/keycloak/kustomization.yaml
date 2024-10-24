@@ -1,0 +1,8 @@
+namespace: blackford-platform-ns
+helmCharts:
+  - name: cluster
+    repo: https://cloudnative-pg.github.io/charts
+    namespace: blackford-platform-ns
+    version: 0.0.7
+    releaseName: keycloak-cluster
+    valuesFile: values.yaml

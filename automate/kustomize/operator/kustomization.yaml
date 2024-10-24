@@ -1,0 +1,9 @@
+---
+namespace: blackford-platform-ns
+helmCharts:
+  - name: cloudnative-pg
+    repo: https://cloudnative-pg.github.io/charts
+    namespace: blackford-platform-ns
+    version: 0.20.2
+    releaseName: blackford-platform
+    valuesFile: values.yaml

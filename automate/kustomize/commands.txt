@@ -1,0 +1,95 @@
+# list the pods created
+kubectl get pods -n blackford-platform-ns 
+
+# list the secrets
+kubectl get secret --sort-by=.metadata.creationTimestamp -n blackford-platform-ns
+
+# list the configMaps
+ubectl get cm --sort-by=.metadata.creationTimestamp -n blackford-platform-ns
+
+# Mutating admission Webhooks
+kubectl get Mutatingwebhookconfigurations
+
+# CRDs
+kubectl get Customresourcedefinitions 
+
+# Jobs
+kubectl get job -n blackford-platform-ns 
+
+# Clusters
+kubectl get cluster -n blackford-platform-ns
+
+# Services
+kubectl get svc -n blackford-platform-ns
+
+# Extract secrets
+
+kubectl get secret -n blackford-platform-ns
+
+
+# dicom
+
+$dicomClusterData = kubectl get secrets dicom-cluster-app -n blackford-platform-ns -o jsonpath="{.data}"
+Write-Host "PostgreSQL dicom app data: $dicomClusterData"
+
+$dicomDbName = kubectl get secrets dicom-cluster-app -n blackford-platform-ns -o jsonpath="{.data.dbname}"
+$dicomDbName = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($dicomEncDbName)) 
+Write-Host "PostgreSQL dicom app dbName: $dicomDecDbName"
+
+$dicomEncHost = kubectl get secrets dicom-cluster-app -n blackford-platform-ns -o jsonpath="{.data.host}"
+$dicomDecHost = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($dicomEncHost)) 
+Write-Host "PostgreSQL dicom app host: $dicomDecHost"
+
+$dicomEncjdbcuri = kubectl get secrets dicom-cluster-app -n blackford-platform-ns -o jsonpath="{.data.jdbc-uri}"
+$dicomDecjdbcuri = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($dicomEncjdbcuri)) 
+Write-Host "PostgreSQL dicom app jdbcuri: $dicomDecjdbcuri"
+
+$encodedPasswordD = kubectl get secret dicom-cluster-app -n blackford-platform-ns -o jsonpath="{.data.password}"
+$decodedPasswordD = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($encodedPasswordD))
+Write-Host "PostgreSQL dicom superuser password: $decodedPasswordD"
+
+$encodedPasswordD = kubectl get secret dicom-cluster-server -n blackford-platform-ns -o jsonpath="{.data.password}"
+$decodedPasswordD = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($encodedPasswordD))
+Write-Host "PostgreSQL dicom superuser password: $decodedPasswordD"
+
+$encodedPasswordD = kubectl get secret dicom-cluster-superuser -n blackford-platform-ns -o jsonpath="{.data.password}"
+$decodedPasswordD = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($encodedPasswordD))
+Write-Host "PostgreSQL dicom superuser password: $decodedPasswordD"
+
+$dicomEncpgPass = kubectl get secrets dicom-cluster-app -n blackford-platform-ns -o jsonpath="{.data.pgPass}"
+Write-Host "PostgreSQL dicom app Enc pgpass: $dicomEncpgPass"
+$dicomDecpgPass = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($dicomEncpgPass)) 
+Write-Host "PostgreSQL dicom app pgpass: $dicomDecpgPass"
+
+$dicomEncuri = kubectl get secrets dicom-cluster-app -n blackford-platform-ns -o jsonpath="{.data.uri}"
+$dicomDecuri = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($dicomEncuri)) 
+Write-Host "PostgreSQL dicom app uri: $dicomDecuri"
+
+
+
+
+
+# keycloak
+$encodedPasswordK = kubectl get secret keycloak-cluster-superuser -n blackford-platform-ns -o jsonpath="{.data.password}"
+$decodedPasswordK = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($encodedPasswordK))
+Write-Host "PostgreSQL keycloak superuser password: $decodedPasswordK"
+
+# Extract uris
+
+kubectl get secret -n blackford-platform-ns
+
+# dicom
+$encodedUriD = kubectl get secret dicom-cluster-superuser -n blackford-platform-ns -o jsonpath="{.data.uri}"
+$decodedUriD = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($encodedUriD))
+Write-Host "PostgreSQL dicom superuser password: $decodedUriD"
+
+# keycloak
+$encodedUriK = kubectl get secret keycloak-cluster-superuser -n blackford-platform-ns -o jsonpath="{.data.uri}"
+$decodedUriK = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($encodedUriK))
+Write-Host "PostgreSQL keycloak superuser password: $decodedUriK"
+
+pgadmin
+kubectl port-forward service/pgadmin-service -n blackford-platform-ns 8080:80
+localhost:8080
+user@domain.com
+SuperSecret
