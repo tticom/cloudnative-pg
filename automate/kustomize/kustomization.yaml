@@ -1,0 +1,8 @@
+namespace: blackford-platform-ns
+resources:
+  - namespace-platform.yaml  
+helmCharts:
+  - name: cloudnative-pg
+    repo: https://cloudnative-pg.github.io/charts
+    version: 0.0.7
+    releaseName: cloudnative-pg-operator

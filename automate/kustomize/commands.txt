@@ -29,6 +29,9 @@ kubectl get secret -n blackford-platform-ns
 
 # dicom
 
+kubectl get secret dicom-cluster-app -n blackford-dicom-ns -o jsonpath="{.data.password}" | ForEach-Object { [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($_)) }
+
+
 $dicomClusterData = kubectl get secrets dicom-cluster-app -n blackford-platform-ns -o jsonpath="{.data}"
 Write-Host "PostgreSQL dicom app data: $dicomClusterData"
 
@@ -93,3 +96,22 @@ kubectl port-forward service/pgadmin-service -n blackford-platform-ns 8080:80
 localhost:8080
 user@domain.com
 SuperSecret
+
+
+kubectl get svc -n blackford-platform-ns
+kubectl get endpoints dicom-cluster-rw -n blackford-platform-ns
+kubectl get pods -n blackford-platform-ns
+kubectl describe svc dicom-cluster-rw -n blackford-platform-ns
+kubectl exec -it pgadmin-0 -n blackford-platform-ns -- nslookup dicom-cluster-rw
+kubectl get namespaces 
+
+
+kubectl get statefulsets -n blackford-platform-ns
+kubectl describe statefulset pgadmin -n blackford-platform-ns
+kubectl logs pgadmin-0 -n blackford-platform-ns
+
+
+
+
+kubectl exec -it pgadmin-0 -n blackford-platform-ns -- ping dicom-cluster-rw
+kubectl exec -it pgadmin-0 -n blackford-platform-ns -- ping keycloak-cluster-rw

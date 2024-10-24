@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+ name: pgadmin-config
+data:
+ servers.json: |
+   {
+       "Servers": {
+         "1": {
+           "Name": "dicom cluster",
+           "Group": "Servers",
+           "Port": 5432,
+           "Username": "app",
+           "Host": "dicom-cluster-rw.blackford-dicom-ns.svc.cluster.local",
+           "SSLMode": "prefer",
+           "MaintenanceDB": "app"
+         },
+         "2": {
+           "Name": "keycloak cluster",
+           "Group": "Servers",
+           "Port": 5432,
+           "Username": "app",
+           "Host": "keycloak-cluster-rw.blackford-keycloak-ns.svc.cluster.local",
+           "SSLMode": "prefer",
+           "MaintenanceDB": "app"
+         }
+       }
+   }
