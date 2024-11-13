@@ -1,0 +1,98 @@
+# list the pods created
+kubectl get pods -n blackford-platform-ns 
+
+# list the secrets
+kubectl get secret --sort-by=.metadata.creationTimestamp -n blackford-platform-ns
+
+# list the configMaps
+ubectl get cm --sort-by=.metadata.creationTimestamp -n blackford-platform-ns
+
+# Mutating admission Webhooks
+kubectl get Mutatingwebhookconfigurations
+
+# CRDs
+kubectl get Customresourcedefinitions 
+
+# Jobs
+kubectl get job -n blackford-platform-ns 
+
+# Clusters
+kubectl get cluster -n blackford-platform-ns
+
+# Services
+kubectl get svc -n blackford-platform-ns
+
+# Extract secrets
+
+kubectl get secret -n blackford-platform-ns
+
+
+# dicom
+
+kubectl get secret dicom-cluster-app -n blackford-dicom-ns -o jsonpath="{.data.password}" | ForEach-Object { [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($_)) }
+kubectl get secret dicom-cluster-app -n blackford-dicom-ns -o jsonpath="{.data.dbname}" | ForEach-Object { [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($_)) }
+kubectl get secret dicom-cluster-app -n blackford-dicom-ns -o jsonpath="{.data.host}" | ForEach-Object { [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($_)) }
+kubectl get secret dicom-cluster-app -n blackford-dicom-ns -o jsonpath="{.data.jdbc-uri}" | ForEach-Object { [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($_)) }
+kubectl get secret dicom-cluster-app -n blackford-dicom-ns -o jsonpath="{.data.password}" | ForEach-Object { [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($_)) }
+kubectl get secret dicom-cluster-app -n blackford-dicom-ns -o jsonpath="{.data.pgPass}" | ForEach-Object { [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($_)) }
+kubectl get secret dicom-cluster-app -n blackford-dicom-ns -o jsonpath="{.data.uri}" | ForEach-Object { [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($_)) }
+
+
+$dicomClusterData = kubectl get secrets dicom-cluster-app -n blackford-platform-ns -o jsonpath="{.data}"
+Write-Host "PostgreSQL dicom app data: $dicomClusterData"
+
+# keycloak
+
+kubectl get secret keycloak-cluster-app -n blackford-keycloak-ns -o jsonpath="{.data.password}" | ForEach-Object { [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($_)) }
+kubectl get secret keycloak-cluster-app -n blackford-keycloak-ns -o jsonpath="{.data.dbname}" | ForEach-Object { [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($_)) }
+kubectl get secret keycloak-cluster-app -n blackford-keycloak-ns -o jsonpath="{.data.host}" | ForEach-Object { [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($_)) }
+kubectl get secret keycloak-cluster-app -n blackford-keycloak-ns -o jsonpath="{.data.jdbc-uri}" | ForEach-Object { [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($_)) }
+kubectl get secret keycloak-cluster-app -n blackford-keycloak-ns -o jsonpath="{.data.password}" | ForEach-Object { [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($_)) }
+kubectl get secret keycloak-cluster-app -n blackford-keycloak-ns -o jsonpath="{.data.pgPass}" | ForEach-Object { [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($_)) }
+kubectl get secret keycloak-cluster-app -n blackford-keycloak-ns -o jsonpath="{.data.uri}" | ForEach-Object { [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($_)) }
+
+
+$keycloak = kubectl get secrets keycloak-cluster-app -n blackford-platform-ns -o jsonpath="{.data}"
+Write-Host "PostgreSQL keycloak app data: $keycloak"
+
+
+# Extract uris
+
+kubectl get secret -n blackford-platform-ns
+kubectl get secret -n blackford-dicom-ns
+kubectl get secret -n blackford-keycloak-ns
+
+# dicom
+$encodedUriD = kubectl get secret dicom-cluster-superuser -n blackford-platform-ns -o jsonpath="{.data.uri}"
+$decodedUriD = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($encodedUriD))
+Write-Host "PostgreSQL dicom superuser password: $decodedUriD"
+
+# keycloak
+$encodedUriK = kubectl get secret keycloak-cluster-superuser -n blackford-platform-ns -o jsonpath="{.data.uri}"
+$decodedUriK = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($encodedUriK))
+Write-Host "PostgreSQL keycloak superuser password: $decodedUriK"
+
+pgadmin
+kubectl port-forward service/pgadmin-service -n blackford-platform-ns 8080:80
+localhost:8080
+user@domain.com
+SuperSecret
+
+
+kubectl get svc -n blackford-platform-ns
+kubectl get endpoints dicom-cluster-rw -n blackford-platform-ns
+kubectl get pods -n blackford-platform-ns
+kubectl describe svc dicom-cluster-rw -n blackford-platform-ns
+kubectl exec -it pgadmin-0 -n blackford-platform-ns -- nslookup dicom-cluster-rw
+kubectl get namespaces 
+
+
+kubectl get statefulsets -n blackford-platform-ns
+kubectl describe statefulset pgadmin -n blackford-platform-ns
+kubectl logs pgadmin-0 -n blackford-platform-ns
+
+
+
+
+kubectl exec -it pgadmin-0 -n blackford-platform-ns -- ping dicom-cluster-rw
+kubectl exec -it pgadmin-0 -n blackford-platform-ns -- ping keycloak-cluster-rw
