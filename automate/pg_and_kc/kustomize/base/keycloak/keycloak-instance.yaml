@@ -1,0 +1,7 @@
+apiVersion: keycloak.org/v1alpha1
+kind: Keycloak
+metadata:
+  name: keycloak
+  namespace: blackford-platform-ns
+spec:
+  instances: 1
