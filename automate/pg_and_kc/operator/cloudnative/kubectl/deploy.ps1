@@ -16,7 +16,7 @@ kubectl get deploy -n cnpg-system cnpg-controller-manager
 # https://cloudnative-pg.io/documentation/1.18/quickstart/#part-2-install-cloudnativepg
 
 # Apply the cluster manifest in base\postgres-cluster\postgres-cluster.yaml
-kubectl apply -f .\base\postgres-cluster\postgres-cluster.yaml
+kubectl apply -f ..\..\..\base\postgres-cluster\postgres-cluster.yaml
 
 # kubectl get pods
 
@@ -31,7 +31,7 @@ kubectl apply -f .\base\postgres-cluster\postgres-cluster.yaml
 # The Pooler must live in the same namespace of the Postgres cluster
 # If you specify your own secrets the operator will not automatically integrate the Pooler.
 
-kubectl apply -f .\base\postgres-cluster\pooler.yaml
+kubectl apply -f ..\..\..\base\postgres-cluster\pooler.yaml
 
 # kubectl exec -ti <PGBOUNCER_POD> -- curl 127.0.0.1:9127/metrics
 # kubectl exec -ti pooler-postgres-db-cluster-rw-f59cbd8d7-tqsjg -- curl 127.0.0.1:9127/metrics

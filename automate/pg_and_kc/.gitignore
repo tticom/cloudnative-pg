@@ -10,3 +10,4 @@ automate/pg_and_kc/operator/keycloak/secrets/secrets.ps1
 **/manifests/
 **/offline/
 **/secrets/
+**.zip

@@ -5,18 +5,18 @@ metadata:
   namespace: default
 spec:
   instances: 1
-  db:
-    vendor: postgres
-    host: keycloak-db-postgres
-    usernameSecret:
-      name: keycloak-db-secret
-      key: username
-    passwordSecret:
-      name: keycloak-db-secret
-      key: password
-  http:
-    tlsSecret: keycloak-tls-secret
-  hostname:
-    hostname: test.keycloak.org
-  proxy:
-    headers: xforwarded # double check your reverse proxy sets and overwrites the X-Forwarded-* headers
+  # db:
+  #   vendor: postgres
+  #   host: keycloak-db-postgres
+  #   usernameSecret:
+  #     name: keycloak-db-secret
+  #     key: username
+  #   passwordSecret:
+  #     name: keycloak-db-secret
+  #     key: password
+  # http:
+  #   tlsSecret: keycloak-tls-secret
+  # hostname:
+  #   hostname: test.keycloak.org
+  # proxy:
+  #   headers: xforwarded # double check your reverse proxy sets and overwrites the X-Forwarded-* headers

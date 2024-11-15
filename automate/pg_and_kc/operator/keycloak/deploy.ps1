@@ -6,3 +6,6 @@ kubectl apply -f https://raw.githubusercontent.com/keycloak/keycloak-k8s-resourc
 
 # Create an instance of keycloak
 kubectl apply -f https://raw.githubusercontent.com/keycloak/keycloak-k8s-resources/26.0.5/kubernetes/kubernetes.yml
+kubectl apply -f ..\..\base\keycloak\keycloak-instance.yaml
+kubectl apply -f ..\..\base\keycloak\realm.yaml
+
