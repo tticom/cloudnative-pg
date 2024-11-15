@@ -113,3 +113,8 @@ kubectl get events -n default --sort-by=.metadata.creationTimestamp
 kubectl delete pod keycloak-instance-0 -n default
 kubectl logs -f keycloak-instance-0 -n default
 
+
+
+# Check the keycloak instance was created
+kubectl get keycloaks/keycloak-instance -o go-template='{{range .status.conditions}}CONDITION: {{.type}}{{"\n"}}  STATUS: {{.status}}{{"\n"}}  MESSAGE: {{.message}}{{"\n"}}{{end}}'
+kubectl get svc -n default

@@ -14,7 +14,7 @@ helm upgrade --install -f https://raw.githubusercontent.com/cloudnative-pg/cloud
 kubectl apply -f https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/refs/heads/main/docs/src/samples/monitoring/prometheusrule.yaml
 
 # See the prometheus rules
-kubectl get prometheusrules  
+# kubectl get prometheusrules  
 
 # Grafana is deployed with no predefined dashboards.
 # kubectl port-forward svc/prometheus-community-grafana 3000:80

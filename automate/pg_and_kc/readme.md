@@ -3,23 +3,33 @@
 
 minikube - https://minikube.sigs.k8s.io/docs/start/
 kubectl - https://kubernetes.io/docs/tasks/tools/
-kuztomize - https://kustomize.io/
 helm - https://helm.sh/docs/intro/install/
 
 On windows the easiest way is:
 
 winget install chocolatey
-choco install kustomize
 choco install kubernetes-helm
 
-
-# Useful for bash
-
-chmod +x deploy.sh
-chmod +x deploy-dicom.sh
-chmod +x deploy-keycloak.sh
-
 # Order of execution
-chmod +x deploy.sh/.ps1
-chmod +x deploy-dicom.sh/.ps1
-chmod +x deploy-keycloak.sh/.ps1
+
+# Install the cloud native operator
+.\operator\cloudnative\deploy.ps1
+
+# Install Prometheus and Grafana
+.\operator\Prometheus\deploy.ps1
+
+# Install keycloak
+.\operator\keycloak\deploy.ps1
+
+# To access Prometheus, port-forward the Prometheus service
+kubectl port-forward svc/prometheus-community-kube-prometheus 9090
+
+# See the prometheus rules
+kubectl get prometheusrules  
+
+# Grafana is deployed with no predefined dashboards.
+kubectl port-forward svc/prometheus-community-grafana 3000:80
+
+# access Prometheus locally at http://localhost:9090
+# access Grafana locally at http://localhost:3000/ providing the credentials 
+# admin as username, prom-operator as password (defined in kube-stack-config.yaml).
