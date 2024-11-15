@@ -1,0 +1,23 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: keycloak-postgres-db-cluster
+  namespace: default
+spec:
+  instances: 3
+  # By default, the operator will install the latest available 
+  # minor version of the latest major version of PostgreSQL when
+  # the operator was released. You can override this by setting 
+  # the imageName key in the spec section of the Cluster 
+  # definition. For example, to install PostgreSQL 13.6:
+  imageName: ghcr.io/cloudnative-pg/postgresql:13.6
+  storage:
+    size: 1Gi
+  # bootstrap:
+  #   initdb:
+  #     database: keycloak-db
+  #     owner: keycloak_user
+  #     secret: 
+  #       name: keycloak-db-secret
+  monitoring:
+    enablePodMonitor: true

@@ -7,7 +7,7 @@ helm repo add prometheus-community https://prometheus-community.github.io/helm-c
 helm upgrade --install -f https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/main/docs/src/samples/monitoring/kube-stack-config.yaml prometheus-community prometheus-community/kube-prometheus-stack
 
 # To access Prometheus, port-forward the Prometheus service
-kubectl port-forward svc/prometheus-community-kube-prometheus 9090
+# kubectl port-forward svc/prometheus-community-kube-prometheus 9090
 
 # define some alerts by creating a prometheusRule
 # kubectl apply -f https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/main/docs/src/samples/monitoring/cnpg-prometheusrule.yaml
@@ -17,7 +17,7 @@ kubectl apply -f https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg
 kubectl get prometheusrules  
 
 # Grafana is deployed with no predefined dashboards.
-kubectl port-forward svc/prometheus-community-grafana 3000:80
+# kubectl port-forward svc/prometheus-community-grafana 3000:80
 # access Grafana locally at http://localhost:3000/ providing the credentials 
 # admin as username, prom-operator as password (defined in kube-stack-config.yaml).
 

@@ -1,0 +1,16 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Pooler
+metadata:
+  # Pooler name should never match with any Cluster name within the same namespace.
+  name: pooler-postgres-db-cluster-rw
+spec:
+  cluster:
+    name: keycloak-postgres-db-cluster
+
+  instances: 3
+  type: rw
+  pgbouncer:
+    poolMode: session
+    parameters:
+      max_client_conn: "1000"
+      default_pool_size: "10"

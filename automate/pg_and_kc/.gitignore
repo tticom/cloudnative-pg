@@ -1,0 +1,12 @@
+**/charts/
+# **/pgAdmin/
+**/password.*
+
+automate/pg_and_kc/operator/keycloak/secrets/certificate.pem
+automate/pg_and_kc/operator/keycloak/secrets/key.pem
+automate/pg_and_kc/operator/keycloak/secrets/secrets.ps1
+
+**/kustomize/
+**/manifests/
+**/offline/
+**/secrets/
