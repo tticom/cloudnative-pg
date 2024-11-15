@@ -1,9 +1,11 @@
 apiVersion: k8s.keycloak.org/v2alpha1
 kind: KeycloakRealmImport
+metadata:
+  name: keycloak-instance-realm
 spec:
   keycloakCRName: keycloak-instance
   realm: 
-    url: https://bitbucket.org/blackfordanalysis/bart-dicom-store-infrastructure/src/main/dicom-store/keycloak/realm-export.json
-  instanceSelector: 
-    matchLabels:
-      app: keycloak-instance
+    realm: https://bitbucket.org/blackfordanalysis/bart-dicom-store-infrastructure/src/main/dicom-store/keycloak/realm-export.json
+  # instanceSelector: 
+  #   matchLabels:
+  #     app: keycloak-instance

@@ -5,6 +5,7 @@ metadata:
   namespace: default
 spec:
   instances: 1
+
   # db:
   #   vendor: postgres
   #   host: keycloak-db-postgres
