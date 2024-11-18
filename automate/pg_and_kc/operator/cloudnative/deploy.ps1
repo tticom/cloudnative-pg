@@ -16,6 +16,11 @@ kubectl get deploy -n cnpg-system cnpg-controller-manager
 # https://cloudnative-pg.io/documentation/1.18/quickstart/#part-2-install-cloudnativepg
 
 # Apply the cluster manifest in base\postgres-cluster\postgres-cluster.yaml
+
+# Introduce a delay before applying the pooler
+Write-Host "Waiting for 60 seconds to ensure previous resources are ready..."
+Start-Sleep -Seconds 60
+
 kubectl apply -f ..\..\base\postgres-cluster\postgres-cluster.yaml
 
 # kubectl get pods
