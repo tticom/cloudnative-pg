@@ -3,6 +3,8 @@
 # add the prometheus-community helm chart repository
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 
+helm repo update
+
 # install the Kube Prometheus stack
 helm upgrade --install -f https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/main/docs/src/samples/monitoring/kube-stack-config.yaml prometheus-community prometheus-community/kube-prometheus-stack
 
