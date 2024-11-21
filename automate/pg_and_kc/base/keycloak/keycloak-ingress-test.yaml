@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: keycloak-instance
+  annotations: 
+    cert-manager.io/issuer: letsencrypt-staging
+    # cert-manager.io/issuer: letsencrypt-prod
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - local.keycloak.io
+    secretName: keycloak-instance-tls
+  rules:
+  - host: local.keycloak.io
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: keycloak-instance
+            port:
+              number: 80
