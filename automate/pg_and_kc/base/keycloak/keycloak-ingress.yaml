@@ -10,7 +10,7 @@ spec:
   tls:
   - hosts:
     - KEYCLOAK_HOST
-    secretName: keycloak-instance-tls
+    secretName: keycloak-operator-tls
   rules:
   - host: KEYCLOAK_HOST
     http:
@@ -19,6 +19,6 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: keycloak-instance
+            name: keycloak-operator
             port:
               number: 8080

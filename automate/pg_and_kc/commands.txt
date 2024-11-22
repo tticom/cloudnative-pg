@@ -41,15 +41,23 @@ kubectl get secret dicom-cluster-app -n blackford-dicom-ns -o jsonpath="{.data.u
 $dicomClusterData = kubectl get secrets dicom-cluster-app -n blackford-platform-ns -o jsonpath="{.data}"
 Write-Host "PostgreSQL dicom app data: $dicomClusterData"
 
-# keycloak
+# keycloak-postgres-db
+kubectl get secret keycloak-postgres-db-cluster-app -o jsonpath="{.data}" 
+kubectl get secret keycloak-postgres-db-cluster-app -o jsonpath="{.data.password}" | ForEach-Object { [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($_)) }
+kubectl get secret keycloak-postgres-db-cluster-app -o jsonpath="{.data.pgpass}" | ForEach-Object { [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($_)) }
+kubectl get secret keycloak-postgres-db-cluster-app -o jsonpath="{.data.username}" | ForEach-Object { [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($_)) }
 
-kubectl get secret keycloak-cluster-app -n blackford-keycloak-ns -o jsonpath="{.data.password}" | ForEach-Object { [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($_)) }
-kubectl get secret keycloak-cluster-app -n blackford-keycloak-ns -o jsonpath="{.data.dbname}" | ForEach-Object { [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($_)) }
-kubectl get secret keycloak-cluster-app -n blackford-keycloak-ns -o jsonpath="{.data.host}" | ForEach-Object { [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($_)) }
-kubectl get secret keycloak-cluster-app -n blackford-keycloak-ns -o jsonpath="{.data.jdbc-uri}" | ForEach-Object { [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($_)) }
-kubectl get secret keycloak-cluster-app -n blackford-keycloak-ns -o jsonpath="{.data.password}" | ForEach-Object { [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($_)) }
-kubectl get secret keycloak-cluster-app -n blackford-keycloak-ns -o jsonpath="{.data.pgPass}" | ForEach-Object { [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($_)) }
-kubectl get secret keycloak-cluster-app -n blackford-keycloak-ns -o jsonpath="{.data.uri}" | ForEach-Object { [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($_)) }
+# secret keycloak-instance-tls
+kubectl get secret keycloak-instance-tls -o jsonpath="{.data}" 
+kubectl get secret keycloak-instance-tls -o jsonpath="{.data.tls}" | ForEach-Object { [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($_)) }
+kubectl get secret keycloak-instance-tls -o jsonpath="{.data.tls.key}" | ForEach-Object { [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($_)) }
+
+kubectl get keycloaks/keycloak-instance -o go-template='{{range .status.conditions}}CONDITION: {{.type}}{{"\n"}}  STATUS: {{.status}}{{"\n"}}  MESSAGE: {{.message}}{{"\n"}}{{end}}'
+
+
+
+
+
 
 
 $keycloak = kubectl get secrets keycloak-cluster-app -n blackford-platform-ns -o jsonpath="{.data}"
