@@ -13,18 +13,9 @@ spec:
       owner: keycloak_admin
       secret: 
         name: pg-instance-secret
-  postInitScript:
-    configMap:
-      name: db-setup-scripts
   backup:
     barmanObjectStore:
-      destinationPath: file:///var/lib/postgresql/backups        
-      retentionPolicy: 
-        retentionDays: 7
-    persistentVolumeClaim:
-      size: 5Gi
-      storageClassName: standard
-
+      destinationPath: file:///var/lib/postgresql/backups
 ---
 apiVersion: v1
 kind: Secret
@@ -53,4 +44,3 @@ data:
     CREATE DATABASE keycloak;
     CREATE USER keycloak_admin WITH PASSWORD 'keycloakpass';
     GRANT ALL PRIVILEGES ON DATABASE keycloak TO keycloak_admin;
-
