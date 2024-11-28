@@ -1,1 +1,1 @@
-Error from server (BadRequest): error when creating ".\\postgres-cluster.yaml": Cluster in version "v1" cannot be handled as a Cluster: strict decoding error: unknown field "spec.bootstrap.postInitScript"
+Error from server (BadRequest): error when creating ".\\postgres-cluster.yaml": Cluster in version "v1" cannot be handled as a Cluster: strict decoding error: unknown field "spec.backup.barmanObjectStore.retentionPolicy", unknown field "spec.backup.persistentVolumeClaim", unknown field "spec.postInitScript"

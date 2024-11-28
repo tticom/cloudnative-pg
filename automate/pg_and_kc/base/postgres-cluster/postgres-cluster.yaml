@@ -13,16 +13,17 @@ spec:
       owner: keycloak_admin
       secret: 
         name: pg-instance-secret
-    postInitScript:
-      configMap:
-        name: db-setup-scripts
+  postInitScript:
+    configMap:
+      name: db-setup-scripts
   backup:
     barmanObjectStore:
       destinationPath: file:///var/lib/postgresql/backups        
-      # retentionPolicy: "7d"
-    # PersistentVolumeClaim:
-    #   size: 5Gi
-    #   storageClassName: standard
+      retentionPolicy: 
+        retentionDays: 7
+    persistentVolumeClaim:
+      size: 5Gi
+      storageClassName: standard
 
 ---
 apiVersion: v1
