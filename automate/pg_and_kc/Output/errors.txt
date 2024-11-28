@@ -1,1 +1,1 @@
-Error from server (BadRequest): error when creating ".\\postgres-cluster.yaml": Cluster in version "v1" cannot be handled as a Cluster: strict decoding error: unknown field "spec.bootstrap.backup", unknown field "spec.bootstrap.postInitScript", unknown field "spec.storage.storageClassName"
+Error from server (BadRequest): error when creating ".\\postgres-cluster.yaml": Cluster in version "v1" cannot be handled as a Cluster: strict decoding error: unknown field "spec.bootstrap.postInitScript"
