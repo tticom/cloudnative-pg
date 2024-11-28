@@ -1,23 +1,63 @@
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
-  name: keycloak-postgres-db-cluster
+  name: local-dev-cluster
   namespace: default
 spec:
   instances: 3
-  # By default, the operator will install the latest available 
-  # minor version of the latest major version of PostgreSQL when
-  # the operator was released. You can override this by setting 
-  # the imageName key in the spec section of the Cluster 
-  # definition. For example, to install PostgreSQL 13.6:
-  imageName: ghcr.io/cloudnative-pg/postgresql:13.6
   storage:
     size: 1Gi
-  # bootstrap:
-  #   initdb:
-  #     database: keycloak-db
-  #     owner: keycloak_user
-  #     secret: 
-  #       name: keycloak-db-secret
-  monitoring:
-    enablePodMonitor: true
+    storageClassName: standard
+  bootstrap:
+    initdb:
+      database: keycloak-db
+      owner: keycloak_admin
+      secret: 
+        name: pg-instance-secret
+    postInitScript:
+      configMap:
+        name: db-setup-scripts
+    backup:
+      barmanObjectStore:
+        destinationPath: file:///var/lib/postgresql/backups        
+        retentionPolicy: "7d"
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: local-dev-pvc
+      spec:
+        resources:
+          requests:
+            storage: 5Gi
+        volumeMode: Filesystem
+        accessModes:
+          - ReadWriteOnce
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: pg-instance-secret
+  namespace: default
+type: Opaque
+data:
+  superuser: c3VwZXJzZWNyZXRwYXNz   # Base64 of supersecretpass
+  replication: cmVwbGljYXRpb25wYXNz # Base64 of replicationpass
+  keycloak_admin: a2V5Y2xvYWtwYXNz  # Base64 of keycloakpass
+  dicom_admin: ZGljb21wYXNz         # Base64 of dicompass
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: db-setup-scripts
+  namespace: default
+data:
+  setup.sql: |
+    CREATE DATABASE dicom;
+    CREATE USER dicom_admin WITH PASSWORD 'dicompass';
+    GRANT ALL PRIVILEGES ON DATABASE dicom TO dicom_admin;
+
+    CREATE DATABASE keycloak;
+    CREATE USER keycloak_admin WITH PASSWORD 'keycloakpass';
+    GRANT ALL PRIVILEGES ON DATABASE keycloak TO keycloak_admin;
+

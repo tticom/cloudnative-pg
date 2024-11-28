@@ -1,9 +1,21 @@
+minikube - https://minikube.sigs.k8s.io/docs/start/
+kubectl - https://kubernetes.io/docs/tasks/tools/
+helm - https://helm.sh/docs/intro/install/
+
+On windows the easiest way is:
+
+winget install chocolatey
+choco install kubernetes-helm
+Docker Desktop
+
+
+
 # https://cloudnative-pg.io/documentation/1.18/installation_upgrade/
 
 # You can install the latest operator manifest for this minor release as follows
 # N.B. Note the release is 1.18 - Current at time of writing is 1.24.1
-kubectl apply -f https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/release-1.18/releases/cnpg-1.18.5.yaml
-# https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/refs/heads/release-1.24/releases/cnpg-1.24.1.yaml
+# kubectl apply -f https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/release-1.18/releases/cnpg-1.18.5.yaml
+kubectl apply -f https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/refs/heads/release-1.24/releases/cnpg-1.24.1.yaml
 
 # verify with:
 kubectl get deploy -n cnpg-system cnpg-controller-manager

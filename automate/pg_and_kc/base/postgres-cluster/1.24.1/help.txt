@@ -1,0 +1,41 @@
+generates the YAML manifests needed to install the CloudNativePG operator
+
+Usage:
+  kubectl cnpg install generate [flags]
+
+Flags:
+      --control-plane                if true, the operator deployment will have a toleration and affinity for 'node-role.kubernetes.io/control-plane'
+  -h, --help                         help for generate
+      --image string                 Optional flag to specify a PostgreSQL image to use. If not specified, the default image is used
+      --log-field-level string       JSON log field to report severity in (default: level) (default "level")
+      --log-field-timestamp string   JSON log field to report timestamp in (default: ts) (default "ts")
+      --replicas int32               Number of replicas in the deployment. Default is zero, meaning that no override is applied on the installation manifest (normally it is a single replica deployment)
+      --version string               The version of the operator to install, specified in the '<major>.<minor>.<patch>' format (e.g. 1.17.0). The default empty value installs the same version of the used plugin. (default "1.24.1")
+      --watch-namespace string       Limit the namespaces to watch. You can pass a list of namespaces through a comma separated string. When empty, the operator watches all namespaces
+
+Global Flags:
+      --as string                         Username to impersonate for the operation. User could be a regular user or a service account in a namespace.
+      --as-group stringArray              Group to impersonate for the operation, this flag can be repeated to specify multiple groups.
+      --as-uid string                     UID to impersonate for the operation.
+      --cache-dir string                  Default cache directory (default "C:\\Users\\niall.finlay\\.kube\\cache")
+      --certificate-authority string      Path to a cert file for the certificate authority
+      --client-certificate string         Path to a client certificate file for TLS
+      --client-key string                 Path to a client key file for TLS
+      --cluster string                    The name of the kubeconfig cluster to use
+      --context string                    The name of the kubeconfig context to use
+      --disable-compression               If true, opt-out of response compression for all requests to the server
+      --insecure-skip-tls-verify          If true, the server's certificate will not be checked for validity. This will make your HTTPS connections insecure
+      --kubeconfig string                 Path to the kubeconfig file to use for CLI requests.
+      --log-destination string            where the log stream will be written
+      --log-level string                  the desired log level, one of error, info, debug and trace (default "info")
+  -n, --namespace string                  If present, the namespace scope for this CLI request
+      --request-timeout string            The length of time to wait before giving up on a single server request. Non-zero values should contain a corresponding time unit (e.g. 1s, 2m, 3h). A value of zero means don't timeout requests. (default "0")
+  -s, --server string                     The address and port of the Kubernetes API server
+      --tls-server-name string            Server name to use for server certificate validation. If it is not provided, the hostname used to contact the server is used
+      --token string                      Bearer token for authentication to the API server
+      --user string                       The name of the kubeconfig user to use
+      --zap-devel                         Development Mode defaults(encoder=consoleEncoder,logLevel=Debug,stackTraceLevel=Warn). Production Mode defaults(encoder=jsonEncoder,logLevel=Info,stackTraceLevel=Error)
+      --zap-encoder encoder               Zap log encoding (one of 'json' or 'console')
+      --zap-log-level level               Zap Level to configure the verbosity of logging. Can be one of 'debug', 'info', 'error', or any integer value > 0 which corresponds to custom debug levels of increasing verbosity
+      --zap-stacktrace-level level        Zap Level at and above which stacktraces are captured (one of 'info', 'error', 'panic').
+      --zap-time-encoding time-encoding   Zap time encoding (one of 'epoch', 'millis', 'nano', 'iso8601', 'rfc3339' or 'rfc3339nano'). Defaults to 'epoch'.
