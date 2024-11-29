@@ -15,7 +15,12 @@ Docker Desktop
 # You can install the latest operator manifest for this minor release as follows
 # N.B. Note the release is 1.18 - Current at time of writing is 1.24.1
 # kubectl apply -f https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/release-1.18/releases/cnpg-1.18.5.yaml
+# kubectl apply -f https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/release-1.21/releases/cnpg-1.21.3.yaml
 kubectl apply -f https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/refs/heads/release-1.24/releases/cnpg-1.24.1.yaml
+
+# Poolers CRD has failed to install because the definition is too long according to the logged error, so
+# Check if the poolers crd was installed
+kubectl get crd poolers.postgresql.cnpg.io
 
 # verify with:
 kubectl get deploy -n cnpg-system cnpg-controller-manager
