@@ -1,0 +1,41 @@
+kubectl run test-curl --rm -it --image=curlimages/curl -- curl -k https://cnpg-webhook-service.cnpg-system.svc:443/readyz
+
+kubectl describe secret cnpg-webhook-cert -n cnpg-system
+
+kubectl exec -it cnpg-controller-manager-67767db857-bln4r -n cnpg-system -- curl -k https://localhost:9443/readyz
+
+kubectl run test-dns --rm -it --image=busybox -- nslookup cnpg-webhook-service.cnpg-system.svc.cluster.local
+
+kubectl run test-nc --rm -it --image=busybox -- nc -zv cnpg-webhook-service.cnpg-system.svc 443
+
+
+kubectl describe svc cnpg-webhook-service -n cnpg-system
+
+kubectl exec -it cnpg-controller-manager-67767db857-bln4r -n cnpg-system -- wget --no-check-certificate -qO- https://localhost:9443/readyz
+
+kubectl logs -n kube-system -l k8s-app=kube-dns
+kubectl rollout restart deployment coredns -n kube-system
+kubectl run test-dns --rm -it --image=busybox -- nslookup cnpg-webhook-service.cnpg-system.svc.cluster.local
+
+
+kubectl run test-connect --rm -it --image=busybox -- sh
+
+nc -zv 10.98.118.35 443
+nc -zv 10.244.0.3 9443
+
+
+kubectl get cluster -n postgres
+kubectl get pods -n postgres
+
+kubectl describe pod <pod-name> -n postgres
+kubectl logs <pod-name> -n postgres
+
+
+kubectl apply -f https://raw.githubusercontent.com/rancher/local-path-provisioner/master/deploy/local-path-storage.yaml
+kubectl patch storageclass local-path -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
+
+kubectl run -n postgres postgres-client --rm -it --image=postgres:15 -- psql -h postgres-rw.postgres.svc.cluster.local -U postgres -c "\l"
+
+kubectl patch job create-keycloak-database -n postgres -p '{"spec":{"template":{"spec":{"containers":[{"name":"create-keycloak-db","args":["-h","postgres-rw","-U","postgres","-c","CREATE DATABASE keycloak; CREATE USER keycloak_admin WITH ENCRYPTED PASSWORD \047KeycloakAdminPassword123\047; GRANT ALL PRIVILEGES ON DATABASE keycloak TO keycloak_admin;"]}]}}}}'
+
+kubectl run -n postgres postgres-client --rm -it --image=postgres:15 --  psql -h postgres-rw.postgres.svc.cluster.local -U postgres -c "\l"

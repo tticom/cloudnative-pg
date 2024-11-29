@@ -1,0 +1,152 @@
+# Namespace definition
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: postgres
+---
+# Secret for PostgreSQL superuser
+apiVersion: v1
+kind: Secret
+metadata:
+  name: postgres-secret
+  namespace: postgres
+type: Opaque
+stringData:
+  password: "SuperUserPassword123"
+---
+# Secret for dicom-store admin user
+apiVersion: v1
+kind: Secret
+metadata:
+  name: dicom-admin-secret
+  namespace: postgres
+type: Opaque
+stringData:
+  username: "dicom_admin"
+  password: "DicomAdminPassword123"
+---
+# Secret for keycloak admin user
+apiVersion: v1
+kind: Secret
+metadata:
+  name: keycloak-admin-secret
+  namespace: postgres
+type: Opaque
+stringData:
+  username: "keycloak_admin"
+  password: "KeycloakAdminPassword123"
+---
+# Persistent Volume and Persistent Volume Claim for local backups
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: local-backup-volume
+  namespace: postgres
+spec:
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: /mnt/c/postgres/backups
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: local-backup-pvc
+  namespace: postgres
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Gi
+---
+# PostgreSQL Cluster definition
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: postgres
+  namespace: postgres
+spec:
+  instances: 3
+  primaryUpdateStrategy: unsupervised
+  storage:
+    size: 10Gi
+    storageClass: standard
+  bootstrap:
+    initdb:
+      database: "dicom-store"
+      owner: "dicom_admin"
+      secret:
+        name: "dicom-admin-secret"
+  env:
+    - name: POSTGRESQL_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: postgres-secret
+          key: password
+---
+# Job to create the keycloak database and user post-bootstrap
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: create-keycloak-database
+  namespace: postgres
+spec:
+  template:
+    spec:
+      initContainers:
+        - name: wait-for-postgres
+          image: busybox:1.28
+          command: ['sh', '-c', 'until nslookup postgres.postgres.svc.cluster.local; do echo waiting for postgres; sleep 2; done;']
+      containers:
+        - name: create-keycloak-db
+          image: postgres:15
+          command: ["psql"]
+          args:
+            - "-h"
+            - "postgres.postgres.svc.cluster.local"
+            - "-U"
+            - "postgres"
+            - "-c"
+            - |
+              CREATE DATABASE keycloak;
+              CREATE USER keycloak_admin WITH ENCRYPTED PASSWORD 'KeycloakAdminPassword123';
+              GRANT ALL PRIVILEGES ON DATABASE keycloak TO keycloak_admin;
+          env:
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: password
+      restartPolicy: OnFailure
+  backoffLimit: 4
+
+---
+# CronJob for daily backups
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: daily-backup
+  namespace: postgres
+spec:
+  schedule: "0 2 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: backup
+              image: postgres:15
+              command: ["pg_dumpall"]
+              args:
+                - "--file=/var/lib/postgresql/backups/daily_backup.sql"
+              volumeMounts:
+                - name: backup-volume
+                  mountPath: /var/lib/postgresql/backups
+          volumes:
+            - name: backup-volume
+              persistentVolumeClaim:
+                claimName: local-backup-pvc
+          restartPolicy: OnFailure

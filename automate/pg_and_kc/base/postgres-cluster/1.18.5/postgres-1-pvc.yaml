@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-1
+  namespace: postgres
+  labels:
+    cnpg.io/cluster: postgres
+    cnpg.io/instanceName: postgres-1
+    cnpg.io/pvcRole: PG_DATA
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: standard
