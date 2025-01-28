@@ -15,4 +15,5 @@ spec:
     initdb:
       database: postgres
       owner: postgres
-
+      secret:
+        name: postgres-secret

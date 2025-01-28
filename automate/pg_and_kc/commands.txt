@@ -27,6 +27,9 @@ kubectl get svc -n blackford-platform-ns
 kubectl get secret -n blackford-platform-ns
 
 
+kubectl get secret postgres-secret -n postgres -o jsonpath="{.data.password}" | ForEach-Object { [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($_)) }
+
+
 # dicom
 
 kubectl get secret dicom-cluster-app -n blackford-dicom-ns -o jsonpath="{.data.password}" | ForEach-Object { [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($_)) }
