@@ -14,4 +14,3 @@ spec:
       owner: postgres
       secret:
         name: postgres-secret
-        key: password
