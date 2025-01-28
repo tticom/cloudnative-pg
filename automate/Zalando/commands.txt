@@ -1,0 +1,42 @@
+
+
+kubectl apply -f https://raw.githubusercontent.com/zalando/postgres-operator/v1.8.0/manifests/postgresql.crd.yaml
+
+kubectl apply -f .\operator-install.yaml
+
+
+kubectl get pods -n postgres-operator
+
+# expect CrashLoopBackOff as no configmap
+
+kubectl apply -f .\operator-configmap.yaml
+
+kubectl get configmap -n postgres-operator
+
+kubectl get pods -n postgres-operator
+kubectl logs -n postgres-operator <pod-name>
+kubectl logs -n postgres-operator postgres-operator-5fb874495c-t9jss
+
+# Ensure the operator's ServiceAccount has the correct permissions. Verify the ClusterRoleBinding
+kubectl get clusterrolebinding postgres-operator
+
+# If the operator is configured to watch a specific namespace, ensure the WATCH_NAMESPACE environment variable matches the namespace where the operator runs
+kubectl describe deployment postgres-operator -n postgres-operator
+
+# After making any corrections, restart the operator to apply the changes
+kubectl rollout restart deployment postgres-operator -n postgres-operator
+
+# Verify Operator Readiness
+kubectl get pods -n postgres-operator
+
+kubectl apply -f postgres-secrets.yaml
+kubectl apply -f zalando-cluster.yaml
+
+kubectl get postgresql -n postgres-operator
+
+kubectl get pods,svc -n postgres-operator
+
+kubectl run postgres-client --rm -it --image=postgres:15 -n postgres-operator -- \
+    psql -h postgres-cluster -U keycloak_admin -d keycloak
+
+# When prompted for the password, provide the decoded password for keycloak_admin (e.g., KeycloakAdminPassword123

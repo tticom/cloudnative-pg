@@ -1,0 +1,26 @@
+
+# Create a namespace for the CrunchyData operator
+
+kubectl create namespace postgres-operator
+
+# Install the CrunchyData operator
+
+kubectl apply -f https://raw.githubusercontent.com/CrunchyData/postgres-operator/main/installers/kubectl/postgres-operator-config.yml -n postgres-operator
+kubectl apply -f https://raw.githubusercontent.com/CrunchyData/postgres-operator/main/installers/kubectl/postgres-operator.yml -n postgres-operator
+
+# Verify installation
+kubectl get pods -n postgres-operator
+
+# Create a Namespace for PostgreSQL Clusters
+kubectl create namespace pg-databases
+
+# Label the Namespace for the Operator to Manage
+kubectl label namespace pg-databases postgres-operator.crunchydata.com/managed=true
+
+
+
+kubectl apply -f postgres-cluster.yaml
+kubectl get pods -n pg-databases
+
+kubectl apply -f databases-configmap.yaml
+

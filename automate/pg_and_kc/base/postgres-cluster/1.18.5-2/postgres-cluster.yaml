@@ -5,6 +5,9 @@ metadata:
   namespace: postgres
 spec:
   instances: 3
+  enableSuperuserAccess: true
+  superuserSecret:
+    name: postgres-secret
   storage:
     size: 10Gi
     storageClass: standard
@@ -12,6 +15,4 @@ spec:
     initdb:
       database: postgres
       owner: postgres
-      secret:
-        name: postgres-secret
-        key: password
+

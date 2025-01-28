@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-init-scripts
+  namespace: pg-databases
+data:
+  01-init.sql: |
+    CREATE DATABASE "dicom-store";
+    CREATE DATABASE "keycloak";
+    CREATE USER dicom_admin WITH PASSWORD 'dicom-password';
+    CREATE USER keycloak_admin WITH PASSWORD 'keycloak-password';
+    GRANT ALL PRIVILEGES ON DATABASE "dicom-store" TO dicom_admin;
+    GRANT ALL PRIVILEGES ON DATABASE "keycloak" TO keycloak_admin;

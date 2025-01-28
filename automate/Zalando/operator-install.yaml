@@ -1,0 +1,91 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: postgres-operator
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: postgres-operator
+  namespace: postgres-operator
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: postgres-operator
+rules:
+  - apiGroups: [""]
+    resources: ["pods", "services", "endpoints", "persistentvolumeclaims", "events", "configmaps", "secrets"]
+    verbs: ["*"]
+  - apiGroups: [""]
+    resources: ["nodes"]
+    verbs: ["get"]
+  - apiGroups: ["extensions"]
+    resources: ["thirdpartyresources"]
+    verbs: ["*"]
+  - apiGroups: ["apps"]
+    resources: ["statefulsets"]
+    verbs: ["*"]
+  - apiGroups: [""]
+    resources: ["persistentvolumes"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["acid.zalan.do"]
+    resources: ["postgresqls"]
+    verbs: ["*"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: postgres-operator
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: postgres-operator
+subjects:
+  - kind: ServiceAccount
+    name: postgres-operator
+    namespace: postgres-operator
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-operator
+  namespace: postgres-operator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: postgres-operator
+  template:
+    metadata:
+      labels:
+        name: postgres-operator
+    spec:
+      serviceAccountName: postgres-operator
+      containers:
+        - name: postgres-operator
+          image: registry.opensource.zalan.do/acid/postgres-operator:v1.8.0
+          ports:
+            - containerPort: 8080
+          env:
+            - name: WATCH_NAMESPACE
+              value: postgres-operator
+            - name: CONFIG_MAP_NAME
+              value: postgres-operator
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-operator
+  namespace: postgres-operator
+data:
+  config.yaml: |
+    enable_crd_validation: true
+    api:
+      listen: 0.0.0.0:8080
+    logging_level: info
+    watched_namespace: postgres-operator

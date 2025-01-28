@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-operator
+  namespace: postgres-operator
+data:
+  config.yaml: |
+    enable_crd_validation: true
+    api:
+      listen: 0.0.0.0:8080
+    logging_level: info
+    watched_namespace: "postgres-operator"

@@ -1,0 +1,21 @@
+apiVersion: acid.zalan.do/v1
+kind: postgresql
+metadata:
+  name: postgres-cluster
+  namespace: postgres-operator
+spec:
+  teamId: "zalando"
+  volume:
+    size: 10Gi
+  numberOfInstances: 3
+  users:
+    keycloak_admin:  # These users are from the secrets above
+      - SUPERUSER
+    dicom_admin:
+      - CREATEDB
+  databases:
+    keycloak: keycloak_admin
+    dicom_store: dicom_admin
+  postgresql:
+    version: "14"
+  enableSuperuser: true
